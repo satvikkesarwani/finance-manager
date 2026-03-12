@@ -9,6 +9,9 @@ const bill = require("./models/bill")
 
 const { checkCookie } = require("./middleware/auth")
 const cookieParser = require("cookie-parser")
+require('dotenv').config()
+const session = require("express-session")
+const passport = require("./services/passport")
 
 const app = express()
 const PORT = process.env.PORT ||8000;
@@ -22,6 +25,13 @@ app.set("views", path.resolve("./views"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(session({
+    secret: "session_secret_123",
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(checkCookie("token"))
 
 app.get("/", async (req, res) => {
