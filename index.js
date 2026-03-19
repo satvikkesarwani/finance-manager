@@ -1,6 +1,7 @@
 const express = require("express")
 const { connectToMongoDB } = require("./connection")
 const path = require("path")
+const cors = require("cors")
 
 const userRoute = require("./routes/user")
 const billRoute = require("./routes/bill")
@@ -14,16 +15,19 @@ const session = require("express-session")
 const passport = require("./services/passport")
 
 const app = express()
-const PORT = process.env.PORT ||8000;
+const PORT = process.env.PORT || 8000;
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/billmanager";
 connectToMongoDB(MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => console.log("MongoDB Connection Error:", err));
 
-app.set("view engine", "ejs")
-app.set("views", path.resolve("./views"))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -37,25 +41,31 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(checkCookie("token"))
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+    res.redirect("http://localhost:5173");
+});
+
+app.get("/api/status", (req, res) => {
+    res.json({ status: "ok", user: req.user || null });
+});
+
+app.get("/api/dashboard", async (req, res) => {
     if (!req.user) {
-        return res.redirect("/user/login");
+        return res.status(401).json({ error: "Unauthorized" });
     }
     const allBills = await bill.find({
         createdBy: req.user._id
     })
-    const length = allBills.length
-    let spending = 0;
-    for (let i = 0; i < length; i++) {
-        spending += allBills[i].amount
-    }
-    return res.render("home", {
-        bill: allBills,
-        spend: spending,
+    const spending = allBills.reduce((acc, b) => acc + b.amount, 0);
+    
+    return res.json({
+        bills: allBills,
+        totalSpending: spending,
+        user: req.user
     })
 })
 
-app.use("/user", userRoute)
-app.use("/bill", billRoute)
+app.use("/api/user", userRoute)
+app.use("/api/bill", billRoute)
 
-app.listen(PORT, () => console.log("Server listening at PORT :", 8000))
+app.listen(PORT, () => console.log("Server listening at PORT :", PORT))

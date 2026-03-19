@@ -2,12 +2,11 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID || 'dummy_client_id',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy_client_secret',
-    callbackURL: "/user/auth/google/callback"
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:8000/api/user/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    // Return the profile here to be handled by the route
     return cb(null, profile);
   }
 ));

@@ -5,56 +5,51 @@ const { createTokenForUser } = require("../services/auth")
 const passport = require("passport")
 const crypto = require("crypto")
 
-
-router.get("/signup", (req, res) => {
-    return res.render("signup")
-})
-
-
-router.get("/login", (req, res) => {
-    return res.render("login")
-})
+const FRONTEND_URL = "http://127.0.0.1:5173";
 
 router.post("/signup", async (req, res) => {
     const { fullname, email, password } = req.body;
-    const newUser = await user.create({
-        fullname,
-        email,
-        password,
-    })
-    return res.redirect("/user/login")
+    try {
+        const newUser = await user.create({
+            fullname,
+            email,
+            password,
+        })
+        return res.status(201).json({ message: "User created successfully" });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
 })
 
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const User = await user.findOne({ email: email })
     if (!User) {
-        return res.render("login", {
-            error: "Incorrect Email or Password"
-        })
+        return res.status(401).json({ error: "Incorrect Email or Password" });
     }
     const isMatch = await MatchPassword(email, password);
 
     if (!isMatch) {
-        return res.render("login", {
-            error: "Incorrect Email or Password"
-        })
+        return res.status(401).json({ error: "Incorrect Email or Password" });
     }
 
     const token = createTokenForUser(User)
 
-    return res.cookie("token", token).redirect("/")
+    return res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax"
+    }).json({ message: "Login successful", user: { id: User._id, fullname: User.fullname, email: User.email } });
 })
 
 router.get("/logout", (req, res) => {
-    // This clears the cookie named 'token'
-    res.clearCookie("token").redirect("/user/login");
+    res.clearCookie("token").json({ message: "Logged out successfully" });
 });
 
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get("/auth/google/callback", 
-    passport.authenticate("google", { failureRedirect: "/user/login" }),
+    passport.authenticate("google", { failureRedirect: `${FRONTEND_URL}/login?error=google_auth_failed` }),
     async (req, res) => {
         const profile = req.user;
         const email = profile.emails[0].value;
@@ -73,10 +68,14 @@ router.get("/auth/google/callback",
             }
 
             const token = createTokenForUser(User);
-            return res.cookie("token", token).redirect("/");
+            return res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax"
+            }).redirect(FRONTEND_URL);
         } catch (error) {
             console.error("Google Auth Error:", error);
-            return res.redirect("/user/login");
+            return res.redirect(`${FRONTEND_URL}/login?error=internal_error`);
         }
     }
 );
