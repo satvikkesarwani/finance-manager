@@ -44,7 +44,7 @@ app.use(checkCookie("token"))
 app.use("/api/user", userRoute)
 app.use("/api/bill", billRoute)
 
-const path = require("path");
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/dist")))
