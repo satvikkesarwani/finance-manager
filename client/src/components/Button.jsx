@@ -4,10 +4,11 @@ import { cn } from "../lib/utils";
 
 const Button = ({ children, className, variant = "primary", ...props }) => {
   const variants = {
-    primary: "bg-brand-primary hover:bg-brand-primary/90 text-white shadow-lg shadow-brand-primary/20",
-    secondary: "bg-surface-dark hover:bg-surface-dark/80 text-white border border-white/10",
-    ghost: "bg-transparent hover:bg-white/5 text-white/70 hover:text-white",
-    danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20",
+    primary: "bg-brand-primary hover:bg-brand-primary/90 text-white shadow-lg shadow-brand-primary/30",
+    secondary: "bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm",
+    ghost: "bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold shadow-sm",
+    danger: "bg-red-50 hover:bg-red-100 text-red-600 border border-red-200",
+    outline: "bg-white border-2 border-slate-300 hover:border-brand-primary hover:bg-brand-primary/5 text-slate-700 hover:text-brand-primary shadow-sm",
   };
 
   return (

@@ -3,8 +3,8 @@
 @theme {
   --color-brand-primary: #6366f1;
   --color-brand-secondary: #a855f7;
-  --color-background-dark: #09090b;
-  --color-surface-dark: #18181b;
+  --color-background-light: #f4f4f5;
+  --color-surface-light: #ffffff;
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
   
   --radius-xl: 1rem;
@@ -12,30 +12,32 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
-  background-color: var(--color-background-dark);
-  color: #fafafa;
+  background-color: #f1f5f9; /* Richer cool slate-100 */
+  color: #1e293b; /* darker slate text */
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   margin: 0;
 }
 
 .glass {
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
 }
 
 .glass-hover:hover {
-  background: rgba(39, 39, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
   * {
-    @apply border-white/5;
+    @apply border-slate-200;
   }
 }

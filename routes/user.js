@@ -46,6 +46,13 @@ router.get("/logout", (req, res) => {
     res.clearCookie("token").json({ message: "Logged out successfully" });
 });
 
+router.get("/status", (req, res) => {
+    if (req.user) {
+        return res.json({ user: req.user });
+    }
+    return res.status(401).json({ error: "Not authenticated" });
+});
+
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get("/auth/google/callback", 

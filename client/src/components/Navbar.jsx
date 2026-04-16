@@ -21,7 +21,7 @@ const Navbar = () => {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-brand-primary/20">
             <Wallet className="text-white w-6 h-6" />
           </div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">
             Finance<span className="text-brand-primary">Flow</span>
           </span>
         </Link>
@@ -29,11 +29,11 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {user ? (
             <>
-              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200">
                 <div className="w-6 h-6 rounded-full bg-brand-primary/20 flex items-center justify-center text-xs font-bold text-brand-primary">
                   {user.fullname?.[0]?.toUpperCase()}
                 </div>
-                <span className="text-sm font-medium text-white/80">{user.fullname}</span>
+                <span className="text-sm font-medium text-slate-700">{user.fullname}</span>
               </div>
               <Button variant="ghost" className="flex items-center gap-2" onClick={handleLogout}>
                 <LogOut className="w-4 h-4" />
@@ -50,7 +50,7 @@ const Navbar = () => {
               </Link>
             </div>
           )}
-          <button className="md:hidden p-2 text-white/60 hover:text-white">
+          <button className="md:hidden p-2 text-slate-400 hover:text-slate-800">
             <Menu className="w-6 h-6" />
           </button>
         </div>

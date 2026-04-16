@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
 
   const checkAuth = async () => {
     try {
-      const { data } = await api.get("/status");
+      const { data } = await api.get("/user/status");
       setUser(data.user);
     } catch (error) {
       setUser(null);
@@ -20,6 +20,24 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     checkAuth();
+
+    const interval = setInterval(() => {
+      checkAuth();
+    }, 5000);
+
+    const handleExpired = () => {
+      setUser(null);
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+        window.location.href = '/login';
+      }
+    };
+
+    window.addEventListener('auth-expired', handleExpired);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('auth-expired', handleExpired);
+    };
   }, []);
 
   const login = async (email, password) => {

@@ -2,6 +2,17 @@ const express = require("express")
 const bill = require("../models/bill")
 const router = express.Router()
 
+router.get("/dashboard", async (req, res) => {
+    if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+    try {
+        const bills = await bill.find({ createdBy: req.user._id }).sort({ date: -1 });
+        const totalSpending = bills.reduce((acc, curr) => acc + curr.amount, 0);
+        return res.json({ bills, totalSpending });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
+
 router.post("/add", async (req, res) => {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
     const { purpose, amount, date } = req.body;

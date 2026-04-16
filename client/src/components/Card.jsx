@@ -10,7 +10,7 @@ const Card = ({ children, className, hover = true }) => {
       transition={{ duration: 0.4 }}
       className={cn(
         "glass rounded-2xl p-6 transition-all duration-300",
-        hover && "hover:border-white/20 hover:shadow-2xl hover:shadow-black/20",
+        hover && "hover:border-black/10 hover:shadow-xl hover:shadow-black/5",
         className
       )}
     >

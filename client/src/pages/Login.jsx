@@ -26,7 +26,8 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/api/user/auth/google";
+    const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+    window.location.href = `${apiUrl}/api/user/auth/google`;
   };
 
   return (
@@ -45,8 +46,8 @@ const Login = () => {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center mb-4 shadow-xl shadow-brand-primary/20">
               <Wallet className="text-white w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-            <p className="text-white/50">Enter your credentials to access your dashboard</p>
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">Welcome Back</h1>
+            <p className="text-slate-500">Enter your credentials to access your dashboard</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,14 +79,14 @@ const Login = () => {
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
+              <div className="w-full border-t border-slate-200"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[#18181b] px-2 text-white/40">Or continue with</span>
+              <span className="bg-white px-2 text-slate-400">Or continue with</span>
             </div>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex flex-col gap-4">
             <Button variant="secondary" className="w-full flex items-center justify-center gap-2" onClick={handleGoogleLogin}>
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -95,9 +96,22 @@ const Login = () => {
               </svg>
               Sign in with Google
             </Button>
+            
+            <Button variant="outline" className="w-full flex items-center justify-center gap-2 border-white/10 hover:bg-white/5" onClick={async () => {
+                const response = await fetch("/api/user/status");
+                if (response.ok) {
+                  navigate("/");
+                } else {
+                  setError("Token has expired or requires login.");
+                }
+              }}>
+              <ArrowRight className="w-5 h-5" />
+              Head to Homepage
+            </Button>
           </div>
 
-          <p className="mt-8 text-center text-sm text-white/50">
+
+          <p className="mt-8 text-center text-sm text-slate-500">
             Don't have an account?{" "}
             <Link to="/signup" className="text-brand-primary hover:underline font-medium">
               Create an account
