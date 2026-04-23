@@ -79,10 +79,10 @@ router.get("/auth/google/callback",
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax"
-            }).redirect(FRONTEND_URL);
+            }).redirect(FRONTEND_URL || "/");
         } catch (error) {
             console.error("Google Auth Error:", error);
-            return res.redirect(`${FRONTEND_URL}/login?error=internal_error`);
+            return res.redirect(FRONTEND_URL ? `${FRONTEND_URL}/login?error=internal_error` : "/login?error=internal_error");
         }
     }
 );
