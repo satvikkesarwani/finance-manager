@@ -5,7 +5,7 @@ const { createTokenForUser } = require("../services/auth")
 const passport = require("passport")
 const crypto = require("crypto")
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://127.0.0.1:5173";
+const FRONTEND_URL = process.env.FRONTEND_URL || "";
 
 router.post("/signup", async (req, res) => {
     const { fullname, email, password } = req.body;

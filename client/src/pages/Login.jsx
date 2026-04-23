@@ -26,8 +26,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
-    window.location.href = `${apiUrl}/api/user/auth/google`;
+    window.location.href = `/api/user/auth/google`;
   };
 
   return (
