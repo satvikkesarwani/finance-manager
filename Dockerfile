@@ -1,5 +1,5 @@
 # Stage 1: Build the React client
-FROM node:18-alpine AS client-builder
+FROM node:20-alpine AS client-builder
 
 WORKDIR /app/client
 
@@ -12,7 +12,7 @@ COPY client/ ./
 RUN npm run build
 
 # Stage 2: Build the Node backend
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 

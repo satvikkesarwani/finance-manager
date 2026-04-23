@@ -56,7 +56,7 @@ router.get("/status", (req, res) => {
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get("/auth/google/callback", 
-    passport.authenticate("google", { failureRedirect: `${FRONTEND_URL}/login?error=google_auth_failed` }),
+    passport.authenticate("google", { failureRedirect: process.env.FRONTEND_URL ? `${process.env.FRONTEND_URL}/login?error=google_auth_failed` : "/login?error=google_auth_failed" }),
     async (req, res) => {
         const profile = req.user;
         const email = profile.emails[0].value;
