@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    image: satvikk005/finance-manager:latest
+    ports:
+      - "80:8000"
+    environment:
+      - PORT=8000
+      - MONGO_URI=mongodb://mongo:27017/billmanager
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
